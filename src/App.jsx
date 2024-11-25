@@ -1,49 +1,58 @@
-import Description from "./components/Description/Description";
-import Options from "./components/Options/Options";
-import Feedback from "./components/Feedback/Feedback";
-import { useEffect, useState } from "react";
-import Notification from "./components/Notification/Notification";
-import {
-  getInitialFeedback,
-  calcFeedbackTotal,
-  calcFeedbackPositive,
-} from "./helpers/feedback";
-import { defaultFeedback, FEEDBACK_KEY } from "../feedback.config";
-import Container from "./components/Container/Container";
+import { useState, useEffect } from "react";
+import Description from "../Description/Description";
+import Options from "../Options/Options";
+import Feedback from "../Feedback/Feedback";
+import Notification from "../Notification/Notification";
+import styles from "./App.module.css";
 
-function App() {
-  const [feedback, setFeedback] = useState(getInitialFeedback);
-  const totalFeedback = calcFeedbackTotal(feedback);
-  const positiveFeedback = calcFeedbackPositive(feedback);
+const App = () => {
+  const [feedback, setFeedback] = useState(() => {
+    const savedFeedback = JSON.parse(localStorage.getItem("feedback"));
+    return savedFeedback || { good: 0, neutral: 0, bad: 0 };
+  });
 
   const updateFeedback = (feedbackType) => {
-    if (feedbackType === "reset") {
-      setFeedback({
-        ...defaultFeedback,
-      });
-      return;
-    }
-    setFeedback({
-      ...feedback,
-      [feedbackType]: feedback[feedbackType] + 1,
-    });
+    setFeedback((prev) => ({
+      ...prev,
+      [feedbackType]: prev[feedbackType] + 1,
+    }));
   };
 
+  const resetFeedback = () => {
+    setFeedback({ good: 0, neutral: 0, bad: 0 });
+  };
+
+  const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
+  const positivePercentage = totalFeedback
+    ? Math.round((feedback.good / totalFeedback) * 100)
+    : 0;
+
   useEffect(() => {
-    localStorage.setItem(FEEDBACK_KEY, JSON.stringify(feedback));
+    localStorage.setItem("feedback", JSON.stringify(feedback));
   }, [feedback]);
 
   return (
-    <Container>
+    <div className={styles.app}>
+      <h1>Sip Happens Café</h1>
       <Description />
-      <Options updateFeedback={updateFeedback} totalFeedback={totalFeedback} />
+      <Options
+        updateFeedback={updateFeedback}
+        resetFeedback={resetFeedback}
+        totalFeedback={totalFeedback}
+      />
       {totalFeedback > 0 ? (
-        <Feedback feedback={feedback} positiveFeedback={positiveFeedback} />
+        <Feedback
+          good={feedback.good}
+          neutral={feedback.neutral}
+          bad={feedback.bad}
+          total={totalFeedback}
+          positive={positivePercentage}
+        />
       ) : (
-        <Notification />
+        <Notification message="No feedback yet!" />
       )}
-    </Container>
+    </div>
   );
-}
+};
 
 export default App;
