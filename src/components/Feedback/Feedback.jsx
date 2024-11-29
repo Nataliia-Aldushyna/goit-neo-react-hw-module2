@@ -1,30 +1,26 @@
-import styles from "./Feedback.module.css";
+import PropTypes from "prop-types";
+import "./Feedback.module.css";
 
-const Feedback = ({ feedback, total, positivePercentage, onLeaveFeedback }) => {
+const Feedback = ({ feedback, total, positivePercentage }) => {
   return (
-    <div className={styles.container}>
-      <h2>Leave your feedback</h2>
-      <div className={styles.buttons}>
-        {Object.keys(feedback).map((option) => (
-          <button
-            key={option}
-            className={styles.button}
-            onClick={() => onLeaveFeedback(option)}
-          >
-            {option}
-          </button>
-        ))}
-      </div>
-      <h2>Statistics</h2>
-      <ul className={styles.stats}>
-        <li>Good: {feedback.good}</li>
-        <li>Neutral: {feedback.neutral}</li>
-        <li>Bad: {feedback.bad}</li>
-        <li>Total: {total}</li>
-        <li>Positive feedback: {positivePercentage}%</li>
-      </ul>
+    <div className="feedback">
+      <p>Good: {feedback.good}</p>
+      <p>Neutral: {feedback.neutral}</p>
+      <p>Bad: {feedback.bad}</p>
+      <p>Total: {total}</p>
+      <p>Positive: {positivePercentage}%</p>
     </div>
   );
+};
+
+Feedback.propTypes = {
+  feedback: PropTypes.shape({
+    good: PropTypes.number.isRequired,
+    neutral: PropTypes.number.isRequired,
+    bad: PropTypes.number.isRequired,
+  }).isRequired,
+  total: PropTypes.number.isRequired,
+  positivePercentage: PropTypes.number.isRequired,
 };
 
 export default Feedback;
