@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import Feedback from "./components/Feedback/Feedback";
-import Notification from "./components/Notification/Notification";
-import styles from "./App.module.css";
+import Options from "./components/Options";
+import Feedback from "./components/Feedback";
+import Notification from "./components/Notification";
+import "./App.css";
 
 const App = () => {
   const [feedback, setFeedback] = useState(() => {
@@ -20,26 +21,36 @@ const App = () => {
     }));
   };
 
+  const resetFeedback = () => {
+    setFeedback({ good: 0, neutral: 0, bad: 0 });
+  };
+
   const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
+
   const positivePercentage = totalFeedback
     ? Math.round((feedback.good / totalFeedback) * 100)
     : 0;
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.header}>Feedback App</h1>
-      <div className={styles.feedbackWrapper}>
-        {totalFeedback > 0 ? (
-          <Feedback
-            feedback={feedback}
-            total={totalFeedback}
-            positivePercentage={positivePercentage}
-            onLeaveFeedback={onLeaveFeedback}
-          />
-        ) : (
-          <Notification message="No feedback given" />
-        )}
-      </div>
+    <div className="App">
+      <h1>Sip Happens Café</h1>
+      <p>Please leave your feedback about our service by selecting one of the options below.</p>
+      
+      <Options
+        options={["good", "neutral", "bad"]}
+        onLeaveFeedback={onLeaveFeedback}
+        onReset={resetFeedback}
+        totalFeedback={totalFeedback}
+      />
+      {totalFeedback > 0 ? (
+        <Feedback
+          feedback={feedback}
+          total={totalFeedback}
+          positivePercentage={positivePercentage}
+        />
+      ) : (
+        <Notification message="No feedback given" />
+      )}
     </div>
   );
 };
