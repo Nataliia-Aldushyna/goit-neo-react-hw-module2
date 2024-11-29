@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Feedback from "./components/Feedback/Feedback";
 import Notification from "./components/Notification/Notification";
+import styles from "./App.module.css";
 
 const App = () => {
   const [feedback, setFeedback] = useState(() => {
@@ -20,24 +21,25 @@ const App = () => {
   };
 
   const totalFeedback = feedback.good + feedback.neutral + feedback.bad;
-
   const positivePercentage = totalFeedback
     ? Math.round((feedback.good / totalFeedback) * 100)
     : 0;
 
   return (
-    <div>
-      <h1>Feedback App</h1>
-      {totalFeedback > 0 ? (
-        <Feedback
-          feedback={feedback}
-          total={totalFeedback}
-          positivePercentage={positivePercentage}
-          onLeaveFeedback={onLeaveFeedback}
-        />
-      ) : (
-        <Notification message="No feedback given" />
-      )}
+    <div className={styles.container}>
+      <h1 className={styles.header}>Feedback App</h1>
+      <div className={styles.feedbackWrapper}>
+        {totalFeedback > 0 ? (
+          <Feedback
+            feedback={feedback}
+            total={totalFeedback}
+            positivePercentage={positivePercentage}
+            onLeaveFeedback={onLeaveFeedback}
+          />
+        ) : (
+          <Notification message="No feedback given" />
+        )}
+      </div>
     </div>
   );
 };
