@@ -5,7 +5,7 @@
   }
   
   button {
-    background-color: #007bff;
+    background-color: #0074ef;
     color: white;
     border: none;
     border-radius: 5px;
@@ -15,23 +15,10 @@
     transition: background-color 0.3s ease;
   }
   
-  button:hover {
-    background-color: #0056b3;
-  }
-  
+  button:hover,
   button:active {
-    background-color: #003f7f;
+    background-color: #0154ad;
   }
   
-  .reset {
-    background-color: #dc3545;
-  }
   
-  .reset:hover {
-    background-color: #a71d2b;
-  }
-  
-  .reset:active {
-    background-color: #82121f;
-  }
   
